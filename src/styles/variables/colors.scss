@@ -6,7 +6,7 @@
   --background-dark: #101a20;
 
   // header chats list, header and footer current chat
-  --panel-background: #202c33;
+  --light-black: #202c33;
 
   // incoming message
   --incoming-message-background: #202c33;
@@ -17,4 +17,10 @@
 
   // background color for input message
   --input-message-background: #2a3942;
+
+  --compose-input-background: #2a3942;
+  --compose-input-background-rgb: 42, 57, 66;
+  --compose-input-background-focused: #335667;
+  --compose-input-background-focused-rgb: 51, 86, 103;
+  --compose-input-border: #2a3942;
 }

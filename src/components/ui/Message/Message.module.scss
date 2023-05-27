@@ -1,0 +1,46 @@
+@mixin msgBefore {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: inherit;
+  top: 0;
+  border-radius: 3px;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 0 50px;
+  display: flex;
+  flex-direction: column;
+
+  &-container {
+    padding: 6px 9px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .input {
+    background-color: var(--light-black);
+    position: relative;
+    align-self: flex-start;
+
+    &:before {
+      @include msgBefore;
+      left: -11px;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+  }
+
+  .output {
+    background-color: var(--outgoing-message-background);
+    position: relative;
+    align-self: flex-end;
+
+    &:before {
+      @include msgBefore;
+      right: -11px;
+      clip-path: polygon(0 100%, 100% 0, 0 0);
+    }
+  }
+}
