@@ -3,3 +3,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+input {
+  font: var(--font-m);
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}

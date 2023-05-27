@@ -1,3 +1,10 @@
-.text {
-  font-weight: bold;
+.app {
+  height: 100vh;
+  background-color: var(--background-dark);
+  color: var(--primary);
+  font: var(--font-m);
+}
+
+.link {
+  margin-right: 10px;
 }

@@ -1,0 +1,19 @@
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+
+  .input {
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid black;
+  }
+
+  .error {
+    color: red;
+    position: absolute;
+    bottom: -24px;
+    font-size: 14px;
+  }
+}
