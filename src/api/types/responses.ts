@@ -10,3 +10,33 @@ export interface BuildResponse<T> {
 export interface SendMessageResponse {
   idMessage: string;
 }
+
+export interface ReceiveMessageResponse {
+  receiptId: number;
+  body: {
+    typeWebhook: string;
+    instanceData: {
+      idInstance: number;
+      wid: string;
+      typeInstance: string;
+    };
+    timestamp: number;
+    idMessage?: string;
+    stateInstance: string;
+    senderData?: {
+      chatId: string;
+      sender: string;
+      senderName: string;
+    };
+    messageData?: {
+      typeMessage: string;
+      textMessageData: {
+        textMessage: string;
+      };
+    };
+  };
+}
+
+export interface DeleteNotification {
+  result: boolean;
+}

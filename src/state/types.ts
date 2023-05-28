@@ -28,4 +28,5 @@ export interface StateType {
   // ============= async actions =============
   authUser: (userData: UserData) => Promise<BuildResponse<AuthResponse | null>>;
   sendMessage: (messageText: string) => Promise<BuildResponse<SendMessageResponse | null>>;
+  getMessage: () => Promise<void>;
 }

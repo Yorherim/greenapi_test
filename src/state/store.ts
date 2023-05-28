@@ -68,6 +68,28 @@ export const useUserStore = create<StateType>()(
 
         return result;
       },
+
+      getMessage: async () => {
+        const userData: Omit<UserData, "phoneNumber"> = {
+          idInstance: get().userData.idInstance,
+          apiTokenInstance: get().userData.apiTokenInstance,
+        };
+        const chatId = `${get().userData.phoneNumber}@c.us`;
+
+        const result = await GreenAPI.getMessage(userData, chatId);
+
+        if (result?.data) {
+          const newMessage: Message = {
+            type: "output",
+            message: result.data.message as string,
+            chatId,
+            id: result.data.messageId as string,
+          };
+          set((state) => {
+            state.messages.push(newMessage);
+          });
+        }
+      },
     }))
   )
 );

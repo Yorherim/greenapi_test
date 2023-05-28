@@ -5,7 +5,7 @@ import styles from "./AuthForm.module.scss";
 import { InputWithLabel } from "@components/ui";
 import { useUserStore } from "@state/store.ts";
 import { UserData } from "@state/types.ts";
-import { BuildResponse } from "@api/types/responses.ts";
+import { AuthResponse, BuildResponse } from "@api/types/responses.ts";
 
 interface AuthForm {
   handlerErrorAuthForm: (errorMessage: string) => void;
@@ -24,7 +24,7 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
   const onSubmit = async (data: FieldValues) => {
     handlerErrorAuthForm("");
 
-    const result: BuildResponse = await authUser(data as UserData);
+    const result: BuildResponse<AuthResponse | null> = await authUser(data as UserData);
 
     if (result.error) {
       handlerErrorAuthForm(result.error);
@@ -47,7 +47,6 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
             propsInput={register("idInstance", {
               required: true,
               onChange: () => handlerClearErrors("idInstance"),
-              value: "1101825357",
             })}
             errors={errors}
           />
@@ -56,7 +55,6 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
             propsInput={register("apiTokenInstance", {
               required: true,
               onChange: () => handlerClearErrors("apiTokenInstance"),
-              value: "3827701e6e49434fbaa3e6664bd90a266f35b06992354116a0",
             })}
             errors={errors}
           />
@@ -70,7 +68,6 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
                   message: "Нужен корректный номер телефона!",
                 },
                 onChange: () => handlerClearErrors("phoneNumber"),
-                value: "79833349163",
               }),
               type: "tel",
               placeholder: "71234567890",

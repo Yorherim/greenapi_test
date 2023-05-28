@@ -1,6 +1,11 @@
 import ky from "ky";
 import { Message, UserData } from "@state/types.ts";
-import { AuthResponse, BuildResponse, SendMessageResponse } from "@api/types/responses.ts";
+import {
+  AuthResponse,
+  BuildResponse,
+  ReceiveMessageResponse,
+  SendMessageResponse,
+} from "@api/types/responses.ts";
 
 export class GreenAPI {
   static baseUrl = "https://api.green-api.com";
@@ -43,6 +48,38 @@ export class GreenAPI {
         })
         .json();
       return this.buildResponse<SendMessageResponse>(result);
+    } catch (err) {
+      return this.buildResponse(null, (err as Error).message);
+    }
+  }
+
+  static async getMessage(userData: Omit<UserData, "phoneNumber">, chatId: string) {
+    const { idInstance, apiTokenInstance } = userData;
+
+    try {
+      const receiveNotification: ReceiveMessageResponse = await ky
+        .get(`${this.baseUrl}/waInstance${idInstance}/receiveNotification/${apiTokenInstance}`)
+        .json();
+
+      if (!receiveNotification) return;
+
+      // deleteNotification
+      await ky
+        .delete(
+          `${this.baseUrl}/waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiveNotification.receiptId}`
+        )
+        .json();
+
+      // игнорируем все уведомления, кроме уведомлений с сообщениями
+      if (
+        receiveNotification.body.senderData?.chatId === chatId &&
+        receiveNotification.body.messageData?.textMessageData.textMessage
+      ) {
+        return this.buildResponse({
+          message: receiveNotification.body.messageData.textMessageData.textMessage,
+          messageId: receiveNotification.body.idMessage,
+        });
+      }
     } catch (err) {
       return this.buildResponse(null, (err as Error).message);
     }

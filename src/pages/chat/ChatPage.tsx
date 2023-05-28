@@ -1,4 +1,12 @@
-import { ChangeEvent, FC, MutableRefObject, useRef, useState, KeyboardEvent } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MutableRefObject,
+  useRef,
+  useState,
+  KeyboardEvent,
+  useEffect,
+} from "react";
 import { Navigate } from "react-router-dom";
 
 import styles from "./ChatPage.module.scss";
@@ -12,6 +20,15 @@ const ChatPage: FC = () => {
   const textareaRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
   const isAuth = useUserStore((state) => state.isAuth);
   const sendMessage = useUserStore((state) => state.sendMessage);
+  const getMessage = useUserStore((state) => state.getMessage);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await getMessage();
+    }, 1500);
+
+    return () => clearInterval(intervalId);
+  }, [getMessage]);
 
   const handlerChangeMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageText(e.currentTarget.value);
@@ -35,8 +52,9 @@ const ChatPage: FC = () => {
 
     const text = messageText;
     setMessageText("");
+    // 24 - line height, 18 - paddings
     textareaRef.current.style.height = `${24 + 18}px`;
-    const result = await sendMessage(text);
+    await sendMessage(text);
   };
 
   const handlerKeyDownSendMessage = async (e: KeyboardEvent<HTMLTextAreaElement>) => {
