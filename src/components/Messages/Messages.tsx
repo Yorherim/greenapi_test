@@ -22,6 +22,8 @@ export const Messages: FC<ComponentProps<"div">> = ({ className, ...props }) => 
             key={`${message.id}${Date.now()}`}
             type={message.type}
             text={message.message}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore
             ref={i === messages.length - 1 ? lastMessageRef : null}
           />
         ))}
