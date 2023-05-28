@@ -54,6 +54,7 @@ const ChatPage: FC = () => {
     setMessageText("");
     // 24 - line height, 18 - paddings
     textareaRef.current.style.height = `${24 + 18}px`;
+    textareaRef.current.style.overflowY = "hidden";
     await sendMessage(text);
   };
 

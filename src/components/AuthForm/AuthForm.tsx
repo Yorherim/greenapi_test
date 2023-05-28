@@ -47,6 +47,7 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
             propsInput={register("idInstance", {
               required: true,
               onChange: () => handlerClearErrors("idInstance"),
+              value: "1101825357",
             })}
             errors={errors}
           />
@@ -55,6 +56,7 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
             propsInput={register("apiTokenInstance", {
               required: true,
               onChange: () => handlerClearErrors("apiTokenInstance"),
+              value: "3827701e6e49434fbaa3e6664bd90a266f35b06992354116a0",
             })}
             errors={errors}
           />
@@ -68,6 +70,7 @@ export const AuthForm: FC<AuthForm & ComponentProps<"div">> = memo(({ handlerErr
                   message: "Нужен корректный номер телефона!",
                 },
                 onChange: () => handlerClearErrors("phoneNumber"),
+                value: "79833349163",
               }),
               type: "tel",
               placeholder: "71234567890",

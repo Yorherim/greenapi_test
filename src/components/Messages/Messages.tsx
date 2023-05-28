@@ -1,17 +1,31 @@
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC, MutableRefObject, useEffect, useRef } from "react";
 
 import styles from "./Messages.module.scss";
 import { Message } from "@components/ui";
 import { useUserStore } from "@state/store.ts";
 
 export const Messages: FC<ComponentProps<"div">> = ({ className, ...props }) => {
+  const lastMessageRef = useRef() as MutableRefObject<HTMLDivElement>;
   const messages = useUserStore((state) => state.messages);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <div className={styles.messages} {...props}>
-      {messages.map((message) => (
-        <Message key={`${message.id}${Date.now()}`} type={message.type} text={message.message} />
-      ))}
+      <div className={styles["messages-wrapper"]}>
+        {messages.map((message, i) => (
+          <Message
+            key={`${message.id}${Date.now()}`}
+            type={message.type}
+            text={message.message}
+            ref={i === messages.length - 1 ? lastMessageRef : null}
+          />
+        ))}
+      </div>
     </div>
   );
 };
