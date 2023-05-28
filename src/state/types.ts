@@ -1,4 +1,4 @@
-import { BuildResponse } from "@api/responses.ts";
+import { AuthResponse, BuildResponse, SendMessageResponse } from "@api/types/responses.ts";
 
 export interface UserData {
   idInstance: string | null;
@@ -10,21 +10,22 @@ export type MessageType = "input" | "output";
 
 export interface Message {
   type: MessageType;
-  text: string;
+  message: string;
+  chatId: string;
+  id: string;
 }
 
 export interface StateType {
   loading: boolean;
   isAuth: boolean;
-  appIsInitialized: boolean;
   userData: UserData;
   messages: Message[];
 
   // ============= actions =============
-  setAppInitialized: (isInitialized: boolean) => void;
   // setUserData: (userData: UserData) => void;
   // setLoading: (loading: boolean) => void;
 
   // ============= async actions =============
-  authUser: (userData: UserData) => Promise<BuildResponse>;
+  authUser: (userData: UserData) => Promise<BuildResponse<AuthResponse | null>>;
+  sendMessage: (messageText: string) => Promise<BuildResponse<SendMessageResponse | null>>;
 }

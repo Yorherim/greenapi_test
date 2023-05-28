@@ -1,6 +1,6 @@
 import ky from "ky";
-import { UserData } from "@state/types.ts";
-import { BuildResponse } from "@api/responses.ts";
+import { Message, UserData } from "@state/types.ts";
+import { AuthResponse, BuildResponse, SendMessageResponse } from "@api/types/responses.ts";
 
 export class GreenAPI {
   static baseUrl = "https://api.green-api.com";
@@ -11,23 +11,47 @@ export class GreenAPI {
    * метод авторизации пользователя
    * ссылка на документацию - https://green-api.com/docs/api/account/GetStateInstance/
    */
-  static async auth(userData: UserData) {
+  static async auth(
+    userData: Omit<UserData, "phoneNumber">
+  ): Promise<BuildResponse<AuthResponse | null>> {
     const { idInstance, apiTokenInstance } = userData;
 
     try {
-      const res = await ky
+      const result: AuthResponse = await ky
         .get(`${this.baseUrl}/waInstance${idInstance}/getStateInstance/${apiTokenInstance}`)
         .json();
-      return this.buildResponse(res);
+      return this.buildResponse<AuthResponse>(result);
     } catch (err) {
       return this.buildResponse(null, (err as Error).message);
     }
   }
 
-  private static buildResponse(
-    data: unknown = null,
+  /*
+   * метод для отправки сообщения
+   * ссылка на документацию - https://green-api.com/docs/api/sending/SendMessage/
+   */
+  static async sendMessage(
+    userData: Omit<UserData, "phoneNumber">,
+    messageData: Omit<Message, "type" | "id">
+  ): Promise<BuildResponse<SendMessageResponse | null>> {
+    const { idInstance, apiTokenInstance } = userData;
+
+    try {
+      const result: SendMessageResponse = await ky
+        .post(`${this.baseUrl}/waInstance${idInstance}/sendMessage/${apiTokenInstance}`, {
+          json: messageData,
+        })
+        .json();
+      return this.buildResponse<SendMessageResponse>(result);
+    } catch (err) {
+      return this.buildResponse(null, (err as Error).message);
+    }
+  }
+
+  private static buildResponse<T>(
+    data: T | null = null,
     errorMessage: string | null = null
-  ): BuildResponse {
+  ): BuildResponse<T> {
     return {
       data,
       error: errorMessage,

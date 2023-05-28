@@ -21,18 +21,6 @@
   }
 
   .input {
-    background-color: var(--light-black);
-    position: relative;
-    align-self: flex-start;
-
-    &:before {
-      @include msgBefore;
-      left: -11px;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-    }
-  }
-
-  .output {
     background-color: var(--outgoing-message-background);
     position: relative;
     align-self: flex-end;
@@ -41,6 +29,18 @@
       @include msgBefore;
       right: -11px;
       clip-path: polygon(0 100%, 100% 0, 0 0);
+    }
+  }
+
+  .output {
+    background-color: var(--light-black);
+    position: relative;
+    align-self: flex-start;
+
+    &:before {
+      @include msgBefore;
+      left: -11px;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
     }
   }
 }

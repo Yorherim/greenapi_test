@@ -1,14 +1,17 @@
-import { ChangeEvent, FC, MutableRefObject, useRef, useState } from "react";
+import { ChangeEvent, FC, MutableRefObject, useRef, useState, KeyboardEvent } from "react";
 import { Navigate } from "react-router-dom";
 
 import styles from "./ChatPage.module.scss";
-import { PanelChat, Message } from "@components/ui";
+import { PanelChat } from "@components/ui";
 import { useUserStore } from "@state/store.ts";
+import { Messages } from "@components/Messages/Messages.tsx";
+import { SendMessageIcon } from "@components/ui/icons";
 
 const ChatPage: FC = () => {
   const [messageText, setMessageText] = useState("");
   const textareaRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
   const isAuth = useUserStore((state) => state.isAuth);
+  const sendMessage = useUserStore((state) => state.sendMessage);
 
   const handlerChangeMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageText(e.currentTarget.value);
@@ -27,6 +30,26 @@ const ChatPage: FC = () => {
     }
   };
 
+  const addMessage = async () => {
+    if (!messageText.trim().length) return;
+
+    const text = messageText;
+    setMessageText("");
+    textareaRef.current.style.height = `${24 + 18}px`;
+    const result = await sendMessage(text);
+  };
+
+  const handlerKeyDownSendMessage = async (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      await addMessage();
+    }
+  };
+
+  const handlerClickSendMessage = async () => {
+    await addMessage();
+  };
+
   if (!isAuth) {
     return <Navigate to={"/auth"} />;
   }
@@ -36,21 +59,25 @@ const ChatPage: FC = () => {
       <div className={styles.chat}>
         <PanelChat className={styles.panel} />
 
-        <div className={styles.messages}>
-          <Message type={"input"} />
-          <Message type={"output"} />
-        </div>
+        <Messages />
 
         <PanelChat className={`${styles.panel} ${styles.footer}`}>
-          <textarea
-            value={messageText}
-            className={styles["input-message"]}
-            onChange={handlerChangeMessage}
-            placeholder={"Введите сообщение"}
-            ref={textareaRef}
-            rows={1}
-            autoFocus
-          />
+          <>
+            <textarea
+              value={messageText}
+              className={styles["input-message"]}
+              onChange={handlerChangeMessage}
+              onKeyDown={handlerKeyDownSendMessage}
+              placeholder={"Введите сообщение"}
+              ref={textareaRef}
+              rows={1}
+              autoFocus
+            />
+            <SendMessageIcon
+              className={styles["send-message-btn"]}
+              onClick={handlerClickSendMessage}
+            />
+          </>
         </PanelChat>
       </div>
     </div>

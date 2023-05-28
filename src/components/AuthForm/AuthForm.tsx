@@ -5,7 +5,7 @@ import styles from "./AuthForm.module.scss";
 import { InputWithLabel } from "@components/ui";
 import { useUserStore } from "@state/store.ts";
 import { UserData } from "@state/types.ts";
-import { BuildResponse } from "@api/responses.ts";
+import { BuildResponse } from "@api/types/responses.ts";
 
 interface AuthForm {
   handlerErrorAuthForm: (errorMessage: string) => void;

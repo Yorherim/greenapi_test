@@ -13,6 +13,9 @@
       color: #0b141a;
     }
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &:before {
       content: "";
@@ -40,9 +43,10 @@
     }
 
     .footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
     }
 
     .input-message {
@@ -54,6 +58,7 @@
       width: 100%;
       resize: none;
       overflow-y: hidden;
+      margin-right: 10px;
 
       &::-webkit-input-placeholder {
         color: #fff;
@@ -71,6 +76,11 @@
         background-color: #6c6969;
         border-radius: 10px;
       }
+    }
+
+    .send-message-btn {
+      cursor: pointer;
+      color: var(--icon);
     }
   }
 }

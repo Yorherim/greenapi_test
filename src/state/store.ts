@@ -2,17 +2,15 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
 
-import { StateType, UserData } from "./types.ts";
+import { Message, StateType, UserData } from "./types.ts";
 import { GreenAPI } from "@api/api.ts";
 
 export const useUserStore = create<StateType>()(
   devtools(
-    immer((set) => ({
+    immer((set, get) => ({
       // ============= state =============
       loading: false,
       isAuth: false,
-      // не стал делать отдельный store для app, т.к. это единственное свойство для него
-      appIsInitialized: false,
       userData: {
         idInstance: null,
         apiTokenInstance: null,
@@ -21,7 +19,6 @@ export const useUserStore = create<StateType>()(
       messages: [],
 
       // ============= actions =============
-      setAppInitialized: (isInitialized: boolean) => set({ appIsInitialized: isInitialized }),
       // setUserData: (userData: UserData) => set((state) => state),
       // setLoading: (loading: boolean) => set((state) => state),
 
@@ -38,6 +35,37 @@ export const useUserStore = create<StateType>()(
         }
 
         set({ loading: false });
+        return result;
+      },
+
+      sendMessage: async (messageText: string) => {
+        set({ loading: true });
+
+        const chatId = `${get().userData.phoneNumber}@c.us`;
+        const messageData: Omit<Message, "type" | "id"> = {
+          message: messageText,
+          chatId,
+        };
+        const userData: Omit<UserData, "phoneNumber"> = {
+          idInstance: get().userData.idInstance,
+          apiTokenInstance: get().userData.apiTokenInstance,
+        };
+
+        const result = await GreenAPI.sendMessage(userData, messageData);
+        set({ loading: false });
+
+        if (result.data) {
+          const newMessage: Message = {
+            type: "input",
+            message: messageText,
+            chatId,
+            id: result.data.idMessage,
+          };
+          set((state) => {
+            state.messages.push(newMessage);
+          });
+        }
+
         return result;
       },
     }))
