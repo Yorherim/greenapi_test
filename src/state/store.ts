@@ -33,6 +33,7 @@ export const useUserStore = create<StateType>()(
         if (!result.error) {
           set((state) => {
             state.userData = userData;
+            state.isAuth = true;
           });
         }
 

@@ -3,4 +3,17 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  .error {
+    color: red;
+    position: absolute;
+    top: 150px;
+  }
+
+  .spiner {
+    position: absolute;
+    top: 150px;
+    width: 25px;
+    height: 25px;
+  }
 }
