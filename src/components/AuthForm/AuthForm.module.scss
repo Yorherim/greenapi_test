@@ -23,7 +23,7 @@
       border-radius: 5px;
       height: 35px;
       background-color: #1e944e;
-      color: var(--primary);
+      color: #fff;
       font: var(--font-m);
 
       &:disabled {
@@ -31,4 +31,10 @@
       }
     }
   }
+}
+
+.error {
+  color: red;
+  position: absolute;
+  top: 150px;
 }

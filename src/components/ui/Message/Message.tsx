@@ -1,9 +1,10 @@
 import { ComponentProps, FC } from "react";
 
 import styles from "./Message.module.scss";
+import { MessageType } from "@state/types.ts";
 
 interface MessageProps {
-  type: "input" | "output";
+  type: MessageType;
 }
 export const Message: FC<MessageProps & ComponentProps<"div">> = ({
   type,
