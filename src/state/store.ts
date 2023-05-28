@@ -70,6 +70,8 @@ export const useUserStore = create<StateType>()(
       },
 
       getMessage: async () => {
+        set({ loading: true });
+
         const userData: Omit<UserData, "phoneNumber"> = {
           idInstance: get().userData.idInstance,
           apiTokenInstance: get().userData.apiTokenInstance,
@@ -77,6 +79,8 @@ export const useUserStore = create<StateType>()(
         const chatId = `${get().userData.phoneNumber}@c.us`;
 
         const result = await GreenAPI.getMessage(userData, chatId);
+
+        set({ loading: false });
 
         if (result?.data) {
           const newMessage: Message = {

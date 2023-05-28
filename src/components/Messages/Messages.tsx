@@ -1,4 +1,5 @@
 import { ComponentProps, FC, MutableRefObject, useEffect, useRef } from "react";
+import { nanoid } from "nanoid";
 
 import styles from "./Messages.module.scss";
 import { Message } from "@components/ui";
@@ -19,7 +20,7 @@ export const Messages: FC<ComponentProps<"div">> = ({ className, ...props }) => 
       <div className={styles["messages-wrapper"]}>
         {messages.map((message, i) => (
           <Message
-            key={`${message.id}${Date.now()}`}
+            key={`${message.id}${nanoid()}`}
             type={message.type}
             text={message.message}
             /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */

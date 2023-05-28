@@ -19,16 +19,19 @@ const ChatPage: FC = () => {
   const [messageText, setMessageText] = useState("");
   const textareaRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
   const isAuth = useUserStore((state) => state.isAuth);
+  const loading = useUserStore((state) => state.loading);
   const sendMessage = useUserStore((state) => state.sendMessage);
   const getMessage = useUserStore((state) => state.getMessage);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      await getMessage();
+      if (!loading) {
+        await getMessage();
+      }
     }, 1500);
 
     return () => clearInterval(intervalId);
-  }, [getMessage]);
+  }, [getMessage, loading]);
 
   const handlerChangeMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageText(e.currentTarget.value);
